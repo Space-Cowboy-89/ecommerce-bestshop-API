@@ -10,4 +10,5 @@ public class BestshopApplication {
 		SpringApplication.run(BestshopApplication.class, args);
 	}
 
+
 }

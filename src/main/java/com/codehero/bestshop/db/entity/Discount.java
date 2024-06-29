@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import org.hibernate.annotations.DynamicInsert;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 @Entity
 @DynamicInsert
@@ -26,23 +27,29 @@ public class Discount {
     private Timestamp modifiedAt;
     @Column(name = "deleted_at")
     private Timestamp deletedAt;
+    @OneToMany(mappedBy = "discount")
+    private List<Product> productList;
 
     public Discount() {
     }
 
-    public Discount(Integer id, String name, String desc, Double discountPercent, Boolean active, Timestamp createdAt, Timestamp modifiedAt, Timestamp deletedAt) {
-        this.id = id;
+    public Discount(String name, String desc, Double discountPercent, Boolean active, Timestamp createdAt, Timestamp modifiedAt, Timestamp deletedAt, List<Product> productList) {
         this.name = name;
         this.desc = desc;
         this.discountPercent = discountPercent;
-        this.active=active;
+        this.active = active;
         this.createdAt = createdAt;
         this.modifiedAt = modifiedAt;
         this.deletedAt = deletedAt;
+        this.productList = productList;
     }
 
     public Integer getId() {
         return id;
+    }
+
+    public List<Product> getProductList() {
+        return productList;
     }
 
     public String getName() {
@@ -81,8 +88,8 @@ public class Discount {
         this.name = name;
     }
 
-    public void setActive(Boolean active){
-        this.active=active;
+    public void setActive(Boolean active) {
+        this.active = active;
     }
 
     public void setDesc(String desc) {
@@ -103,5 +110,9 @@ public class Discount {
 
     public void setDeletedAt(Timestamp deletedAt) {
         this.deletedAt = deletedAt;
+    }
+
+    public void setProductList(List<Product> productList) {
+        this.productList = productList;
     }
 }

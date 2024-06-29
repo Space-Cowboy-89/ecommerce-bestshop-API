@@ -1,41 +1,42 @@
 package com.codehero.bestshop.db.entity;
 
-
 import jakarta.persistence.*;
 import org.hibernate.annotations.DynamicInsert;
 
 import java.sql.Timestamp;
 
 @Entity
+@Table(name = "cart_item")
 @DynamicInsert
-@Table(name = "product_inventory")
-public class ProductInventory {
+public class CartItem {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
-    @Column(nullable = false)
+    private Long id;
+    @Column
     private Integer quantity;
-    @Column(name = "created_at", nullable = false)
+    @Column(name = "created_at")
     private Timestamp createdAt;
     @Column(name = "modified_at")
     private Timestamp modifiedAt;
-    @Column(name = "deleted_at")
-    private Timestamp deletedAt;
-    @OneToOne(mappedBy = "productInventory")
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "product_id")
     private Product product;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "sessionId")
+    private ShoppingSession shoppingSession;
 
-    public ProductInventory() {
+    public CartItem() {
     }
 
-    public ProductInventory(Integer quantity, Timestamp createdAt, Timestamp modifiedAt, Timestamp deletedAt, Product product) {
+    public CartItem(Integer quantity, Timestamp createdAt, Timestamp modifiedAt, Product product, ShoppingSession shoppingSession) {
         this.quantity = quantity;
         this.createdAt = createdAt;
         this.modifiedAt = modifiedAt;
-        this.deletedAt = deletedAt;
         this.product = product;
+        this.shoppingSession = shoppingSession;
     }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
@@ -51,15 +52,15 @@ public class ProductInventory {
         return modifiedAt;
     }
 
-    public Timestamp getDeletedAt() {
-        return deletedAt;
-    }
-
     public Product getProduct() {
         return product;
     }
 
-    public void setId(Integer id) {
+    public ShoppingSession getShoppingSession() {
+        return shoppingSession;
+    }
+
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -75,11 +76,11 @@ public class ProductInventory {
         this.modifiedAt = modifiedAt;
     }
 
-    public void setDeletedAt(Timestamp deletedAt) {
-        this.deletedAt = deletedAt;
-    }
-
     public void setProduct(Product product) {
         this.product = product;
+    }
+
+    public void setShoppingSession(ShoppingSession shoppingSession) {
+        this.shoppingSession = shoppingSession;
     }
 }

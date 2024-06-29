@@ -5,12 +5,13 @@ import jakarta.persistence.*;
 import org.hibernate.annotations.DynamicInsert;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 
 @Entity
 @DynamicInsert
 @Table(name = "product_category")
-public class ProductCategory{
+public class ProductCategory {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -18,23 +19,26 @@ public class ProductCategory{
     private String name;
     @Column
     private String desc;
-    @Column(name="created_at", nullable = false)
+    @Column(name = "created_at", nullable = false)
     private Timestamp createdAt;
-    @Column(name="modified_at")
+    @Column(name = "modified_at")
     private Timestamp modifiedAt;
-    @Column(name="deleted_at")
+    @Column(name = "deleted_at")
     private Timestamp deletedAt;
+    @OneToMany(mappedBy = "productCategory")
+    private List<Product> productList;
 
     public ProductCategory() {
     }
 
-    public ProductCategory(Integer id, String name, String desc, Timestamp createdAt, Timestamp modifiedAt, Timestamp deletedAt) {
-        this.id = id;
+
+    public ProductCategory(String name, String desc, Timestamp createdAt, Timestamp modifiedAt, Timestamp deletedAt, List<Product> productList) {
         this.name = name;
         this.desc = desc;
         this.createdAt = createdAt;
         this.modifiedAt = modifiedAt;
         this.deletedAt = deletedAt;
+        this.productList = productList;
     }
 
     public Integer getId() {
@@ -61,6 +65,10 @@ public class ProductCategory{
         return deletedAt;
     }
 
+    public List<Product> getProductList() {
+        return productList;
+    }
+
     public void setId(Integer id) {
         this.id = id;
     }
@@ -83,5 +91,9 @@ public class ProductCategory{
 
     public void setDeletedAt(Timestamp deletedAt) {
         this.deletedAt = deletedAt;
+    }
+
+    public void setProductList(List<Product> productList) {
+        this.productList = productList;
     }
 }

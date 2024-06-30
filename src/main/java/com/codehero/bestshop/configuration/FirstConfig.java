@@ -41,7 +41,7 @@ public class FirstConfig {
         HibernateJpaVendorAdapter adapter = new HibernateJpaVendorAdapter();
         adapter.setDatabase(Database.MYSQL);
         //permette di aggiornare la struttura delle tabelle del db in base all'implementazioni delle classi entity
-        adapter.setGenerateDdl(true);
+        adapter.setGenerateDdl(false);
 
         LocalContainerEntityManagerFactoryBean factory = new LocalContainerEntityManagerFactoryBean();
         factory.setDataSource(ds);

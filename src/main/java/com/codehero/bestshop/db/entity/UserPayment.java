@@ -6,7 +6,7 @@ import org.hibernate.annotations.DynamicInsert;
 import java.time.LocalDate;
 
 @Entity
-@Table(name= "user_payment")
+@Table(name = "user_payment")
 @DynamicInsert
 public class UserPayment {
     @Id
@@ -21,7 +21,7 @@ public class UserPayment {
     @Column
     private LocalDate expiry;
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="user_id")
+    @JoinColumn(name = "user_id")
     private User user;
 
     public UserPayment() {

@@ -27,6 +27,8 @@ public class ProductService {
 
     }
 
+    public void metodoProva(){}
+
     public Product getProdByCateg(ProductRequest request){
 
     }

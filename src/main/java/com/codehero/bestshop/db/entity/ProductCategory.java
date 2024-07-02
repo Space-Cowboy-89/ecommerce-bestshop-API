@@ -33,7 +33,8 @@ public class ProductCategory {
     }
 
 
-    public ProductCategory(String name, String desc, Timestamp createdAt, Timestamp modifiedAt, Timestamp deletedAt, List<Product> productList) {
+    public ProductCategory(String categoryCode,String name, String desc, Timestamp createdAt, Timestamp modifiedAt, Timestamp deletedAt, List<Product> productList) {
+        this.categoryCode = categoryCode;
         this.name = name;
         this.desc = desc;
         this.createdAt = createdAt;
@@ -42,8 +43,8 @@ public class ProductCategory {
         this.productList = productList;
     }
 
-    public Integer getId() {
-        return id;
+    public String getCategoryCode() {
+        return categoryCode;
     }
 
     public String getName() {
@@ -70,8 +71,8 @@ public class ProductCategory {
         return productList;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public void setCategoryCode(String categoryCode) {
+        this.categoryCode = categoryCode;
     }
 
     public void setName(String name) {

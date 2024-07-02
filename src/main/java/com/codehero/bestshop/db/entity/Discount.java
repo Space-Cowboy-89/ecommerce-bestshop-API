@@ -12,7 +12,8 @@ import java.util.List;
 public class Discount {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    @Column(name= "discount_code")
+    private String discountCode;
     @Column(nullable = false)
     private String name;
     @Column
@@ -33,7 +34,8 @@ public class Discount {
     public Discount() {
     }
 
-    public Discount(String name, String desc, Double discountPercent, Boolean active, Timestamp createdAt, Timestamp modifiedAt, Timestamp deletedAt, List<Product> productList) {
+    public Discount(String discountCode,String name, String desc, Double discountPercent, Boolean active, Timestamp createdAt, Timestamp modifiedAt, Timestamp deletedAt, List<Product> productList) {
+        this.discountCode = discountCode;
         this.name = name;
         this.desc = desc;
         this.discountPercent = discountPercent;
@@ -44,8 +46,8 @@ public class Discount {
         this.productList = productList;
     }
 
-    public Integer getId() {
-        return id;
+    public String getDiscountCode() {
+        return discountCode;
     }
 
     public List<Product> getProductList() {
@@ -80,8 +82,8 @@ public class Discount {
         return deletedAt;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public void setDiscountCode(String discountCode) {
+        this.discountCode = discountCode;
     }
 
     public void setName(String name) {

@@ -12,6 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.List;
+import java.util.Optional;
 
 public class ProductDaoClass implements ProductDaoInterface {
     @PersistenceContext()
@@ -33,22 +34,24 @@ public class ProductDaoClass implements ProductDaoInterface {
 
     @Override
     public Product getProdByName(String name) {
-        return null;
+        return productRepo.findProductByName(name);
     }
 
     @Override
     public List<Product> retProdListByCategory(String categoryCode) {
+
         return null;
     }
 
     @Override
     public List<Product> retAvaibProdOfCatInDiscount(String categoryCode) {
+
         return null;
     }
 
     @Override
     public void insertProd(Product product) {
-
+        em.persist(product);
     }
 
     @Override
@@ -73,11 +76,15 @@ public class ProductDaoClass implements ProductDaoInterface {
 
     @Override
     public void removeProd(String sku) {
-
+        Optional<Product> product = productRepo.findById(sku);
+        if (product.isPresent())
+            em.remove(product);
+        //TODO aggiustare
+        return null;
     }
 
     @Override
     public void modifyPriceProd(String sku, double newPrice) {
-
+        productRepo.setPriceProdById(sku,newPrice);
     }
 }

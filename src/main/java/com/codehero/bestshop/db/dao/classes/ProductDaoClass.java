@@ -14,10 +14,13 @@ import org.slf4j.LoggerFactory;
 import java.util.List;
 import java.util.Optional;
 
+
+//TODO concludere classe DAO
 public class ProductDaoClass implements ProductDaoInterface {
     @PersistenceContext()
     private EntityManager em;
     private final Logger LOGGER;
+
     // interf. repo
     private final ProductRepository productRepo;
     private final ProductCategoryRepository productCategoryRepo;
@@ -38,8 +41,8 @@ public class ProductDaoClass implements ProductDaoInterface {
     }
 
     @Override
-    public List<Product> retProdListByCategory(String categoryCode) {
-
+    public List<Product> retProdListByCategory(String categoryName) {
+        productRepo.findProductByCategoryName(categoryName);
         return null;
     }
 

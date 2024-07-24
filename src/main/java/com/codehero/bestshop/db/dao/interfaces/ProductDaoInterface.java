@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface ProductDaoInterface {
     public Product getProdByName(String name);
-    public List<Product> retProdListByCategory(String categoryCode);
+    public List<Product> retProdListByCategory(String categoryName);
     public List<Product> retAvaibProdOfCatInDiscount(String categoryCode);
     public void insertProd(Product product);
     public List<Product> retProdInDiscount();

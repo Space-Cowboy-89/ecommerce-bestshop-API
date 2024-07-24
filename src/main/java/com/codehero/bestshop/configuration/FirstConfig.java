@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 import org.springframework.core.env.Environment;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
@@ -25,7 +26,7 @@ import javax.sql.DataSource;
 @EnableTransactionManagement
 public class FirstConfig {
 
-    @Bean(name="prodDbConn")
+    @Bean(name = "prodDbConn")
     @Autowired
     public DataSource getDbConnection(Environment env) {
         DriverManagerDataSource ds = new DriverManagerDataSource();
@@ -37,6 +38,8 @@ public class FirstConfig {
     }
 
     @Bean(name = "prodEmFactory")
+    @Autowired
+    @Primary
     public LocalContainerEntityManagerFactoryBean getEntityManager(DataSource ds) {
         HibernateJpaVendorAdapter adapter = new HibernateJpaVendorAdapter();
         adapter.setDatabase(Database.MYSQL);

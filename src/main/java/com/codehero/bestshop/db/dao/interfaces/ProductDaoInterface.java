@@ -8,8 +8,19 @@ import java.util.List;
 
 //TODO Inserire oggetti request nei metodi
 //TODO creare "- prodotti disponibili per prodotto generico(es. "televisione 40 pollici nella barra ricerca")"
-public interface ProductDaoInterface {
+//TODO creare branch di test
+//TODO CI/CD
+//TODo vedere come inserire descrizione in una commit
 
+// creazione javadoc : javadoc -d ~/doc -sourcepath src/main/java -subpackages com.codehero.bestshop.db.dao.interfaces
+
+-public interface ProductDaoInterface {
+
+    /**
+     * Metodo che fà inserimento
+     *
+     * @param request
+     */
     public void insertProduct(ProductRequest request);
 
     public Product getProdByName(String name);

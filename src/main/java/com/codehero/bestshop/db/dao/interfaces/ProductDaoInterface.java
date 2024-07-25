@@ -8,52 +8,51 @@ import java.util.List;
 
 //TODO Inserire oggetti request nei metodi
 //TODO creare "- prodotti disponibili per prodotto generico(es. "televisione 40 pollici nella barra ricerca")"
-//TODO creare branch di test
 //TODO CI/CD
-//TODo vedere come inserire descrizione in una commit
 
 // creazione javadoc : javadoc -d ~/doc -sourcepath src/main/java -subpackages com.codehero.bestshop.db.dao.interfaces
 
--public interface ProductDaoInterface {
+public interface ProductDaoInterface {
 
     /**
      * Metodo che fà inserimento
      *
      * @param request
      */
-    public void insertProduct(ProductRequest request);
+    public void insertProduct(List<ProductRequest> request);
 
     public Product getProdByName(String name);
 
     public List<Product> getProdByCategory(String categoryCode);
 
+    // Restituisce i prodotti che hanno uno sconto attivato e disattivato
     public List<Product> getProdOfCatInDiscount(String categoryCode);
 
     public List<Product> getProdOfADiscount(String discountCode);
 
     public List<Product> getAvaibProd();
 
-    //Restituisce i prodotti di una categoria att./dis.
-    public List<Product> getProdOfCatActDis();
+    //Restituisce i prodotti di una categoria att. o dis.
+    public List<Product> getProdOfCatActDis(String categoryCode);
 
-    //Restituisce i prodotti di una categoria con uno sconto att./dis.
-    public List<Product> getProdOfCatInDiscActDis();
+    //Restituisce i prodotti di una categoria con uno sconto att. o dis.
+    public List<Product> getProdOfCatInDiscActDis(String categoryCode);
 
-    //Restituisce prodotti disponibile che hanno un legame con sconto
+    //Restituisce prodotti disponibile che hanno uno sconto attivato e disattivato
     public List<Product> getAvaibProdInDisc();
 
-    //Restituisce prodotti disponibile che hanno un legame con sconto dis./att.
+    //Restituisce prodotti disponibile che hanno un legame con sconto dis. o att.
     public List<Product> getAvaibProdInDiscActOrDis();
 
-    public void increaseAvaibilityProd(String sku);
+    public void increaseAvaibilityProd(List<ProductRequest> requestList);
 
-    public void decreaseAvaibilityProd(String sku);
+    public void decreaseAvaibilityProd(List<ProductRequest> requestList);
 
-    public void setCatInProd(String categoryCod);
+    public void setCatInProd(List<ProductRequest> requestList,String categoryCod);
 
-    public void setDiscountInProd(String discountCode);
+    public void setDiscountInProd(List<ProductRequest> requestList,String discountCode);
 
-    public void removeProd(String sku);
+    public void removeProd(List<ProductRequest> requestList,String sku);
 
-    public void modifyPriceProd(String sku, double newPrice);
+    public void modifyPriceProd(List<ProductRequest> requestList,String sku, double newPrice);
 }

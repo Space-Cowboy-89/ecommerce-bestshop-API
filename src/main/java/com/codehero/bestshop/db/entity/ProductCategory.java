@@ -8,6 +8,7 @@ import java.sql.Timestamp;
 import java.util.List;
 
 
+//TODO modificare pk della tabella "product_category"
 @Entity
 @DynamicInsert
 @Table(name = "product_category")
@@ -20,6 +21,8 @@ public class ProductCategory {
     private String name;
     @Column
     private String desc;
+    @Column
+    private boolean active;
     @Column(name = "created_at", nullable = false)
     private Timestamp createdAt;
     @Column(name = "modified_at")
@@ -33,7 +36,7 @@ public class ProductCategory {
     }
 
 
-    public ProductCategory(String categoryCode,String name, String desc, Timestamp createdAt, Timestamp modifiedAt, Timestamp deletedAt, List<Product> productList) {
+    public ProductCategory(String categoryCode, String name, String desc, Timestamp createdAt, Timestamp modifiedAt, Timestamp deletedAt, List<Product> productList) {
         this.categoryCode = categoryCode;
         this.name = name;
         this.desc = desc;
@@ -42,6 +45,7 @@ public class ProductCategory {
         this.deletedAt = deletedAt;
         this.productList = productList;
     }
+
 
     public String getCategoryCode() {
         return categoryCode;
@@ -53,6 +57,10 @@ public class ProductCategory {
 
     public String getDesc() {
         return desc;
+    }
+
+    public boolean isActive() {
+        return active;
     }
 
     public Timestamp getCreatedAt() {
@@ -97,5 +105,9 @@ public class ProductCategory {
 
     public void setProductList(List<Product> productList) {
         this.productList = productList;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
     }
 }

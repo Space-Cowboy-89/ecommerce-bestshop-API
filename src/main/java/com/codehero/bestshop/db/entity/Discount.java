@@ -6,6 +6,8 @@ import org.hibernate.annotations.DynamicInsert;
 import java.sql.Timestamp;
 import java.util.List;
 
+//TODO modificare pk della tabella "discount"
+
 @Entity
 @DynamicInsert
 @Table(name = "discount")

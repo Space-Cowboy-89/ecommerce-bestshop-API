@@ -21,13 +21,14 @@ public class ProductDaoClass implements ProductDaoInterface {
     private EntityManager em;
     private final Logger LOGGER;
 
-    // interf. repo
+    // interfacce repo
     private final ProductRepository productRepo;
     private final ProductCategoryRepository productCategoryRepo;
     private final ProductInventoryRepository productInventoryRepo;
     private final DiscountRepository discountRepo;
 
-    public ProductDaoClass(Logger LOGGER, ProductRepository productRepo, ProductCategoryRepository productCategoryRepo, ProductInventoryRepository productInventoryRepo, DiscountRepository discountRepo) {
+    public ProductDaoClass(ProductRepository productRepo, ProductCategoryRepository productCategoryRepo,
+                           ProductInventoryRepository productInventoryRepo, DiscountRepository discountRepo) {
         this.productRepo = productRepo;
         this.productCategoryRepo = productCategoryRepo;
         this.productInventoryRepo = productInventoryRepo;
@@ -40,11 +41,7 @@ public class ProductDaoClass implements ProductDaoInterface {
         return productRepo.findProductByName(name);
     }
 
-    @Override
-    public List<Product> retProdListByCategory(String categoryName) {
-        productRepo.findProductByCategoryName(categoryName);
-        return null;
-    }
+
 
     @Override
     public List<Product> retAvaibProdOfCatInDiscount(String categoryCode) {

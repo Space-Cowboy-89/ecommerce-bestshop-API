@@ -9,6 +9,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+
+//TODO integrare :
+//- lettura/scrittura in un file
+//- Stream
+//- Optional
 @Service
 public class ProductService {
     @PersistenceContext(unitName = "prodEmFactory")

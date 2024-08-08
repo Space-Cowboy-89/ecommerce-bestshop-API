@@ -4,25 +4,24 @@ package com.codehero.bestshop.request;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
 @AllArgsConstructor
 public class ProductRequest {
-    @JsonProperty(required = false)
+    @JsonProperty(required = true)
     private String name;
-    @JsonProperty(required = false)
-    private String categoria;
-    @JsonProperty(required = false)
+    @JsonProperty(required = true)
     private String brand;
-    @JsonProperty(required = false)
+    @JsonProperty(required = true)
     private String sku;
-    @JsonProperty(required = false)
+    @JsonProperty(required = true)
     private String descrizione;
-    @JsonProperty(required = false)
-    private double prezzo;
-    @JsonProperty(required = false)
-    private double sconto;
-    //Il campo è legato al numero di prodotti da aggiungere/eliminare dal magazzino
-    @JsonProperty(required = false)
-    private int numProdotto;
+    @JsonProperty(required = true)
+    private double price;
+    @JsonProperty(required = true)
+    private int numProduct;
+    private String categoryCode;
+    private String discountCode;
 }

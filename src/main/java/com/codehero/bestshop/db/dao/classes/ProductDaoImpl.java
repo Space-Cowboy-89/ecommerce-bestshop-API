@@ -4,6 +4,7 @@ import com.codehero.bestshop.db.dao.interfaces.ProductDao;
 import com.codehero.bestshop.db.entity.Product;
 import com.codehero.bestshop.db.entity.ProductCategory;
 import com.codehero.bestshop.db.repository.ProductRepository;
+import com.codehero.bestshop.utility.Constant.DbCrudConst;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import org.slf4j.Logger;
@@ -12,42 +13,67 @@ import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
+import java.util.Optional;
 
 
 //TODO creare interf. Dao altre Entity
+
 @Component
 public class ProductDaoImpl implements ProductDao {
     @PersistenceContext()
     private EntityManager em;
-    //Repo interface
+
+    //Repository interface
     private ProductRepository productRepo;
+
     //DAO classes
     private ProductInventoryDaoImpl prodInventDao;
     private ProductCategoryDaoImpl prodCatDao;
     private DiscountDaoImpl discDao;
+    private GeneralDaoImpl <Product> generalDao;
+
     //Costants
-    private final int BATCHSIZE = 100;
     private final Logger LOGGER;
 
 
-    public ProductDaoImpl(ProductRepository productRepo, ProductInventoryDaoImpl prodInventDao, ProductCategoryDaoImpl prodCatDao, DiscountDaoImpl discDao) {
+    public ProductDaoImpl(ProductRepository productRepo, ProductInventoryDaoImpl prodInventDao
+            , ProductCategoryDaoImpl prodCatDao, DiscountDaoImpl discDao, GeneralDaoImpl <Product> generalDao) {
         this.productRepo = productRepo;
         this.prodInventDao = prodInventDao;
         this.prodCatDao = prodCatDao;
         this.discDao = discDao;
+        this.generalDao = generalDao;
         this.LOGGER = LoggerFactory.getLogger(ProductDaoImpl.class);
     }
 
-    //TODO fare service
-    @Override
+
+
     public void insertProduct(Product product) {
         productRepo.save(product);
     }
 
+    public void updateProduct(Product product) {
+        productRepo.save(product);
+    }
+
+    public void deleteProduct(Product product) {
+        productRepo.delete(product);
+    }
+
+    public void dbCrudInBatch(List<Product> productList, DbCrudConst.DBOPERATION dbOperation) {
+        generalDao.dbCrudInBatch(productList,dbOperation);
+    }
+
+
+
     @Override
     public Product getProdByName(String nameProduct) {
-        return productRepo.findByName(nameProduct);
+        return productRepo.findByName(nameProduct).orElse(null);
+    }
+
+    @Override
+    public List<Product> findBySkuList(List<String> skuList) {
+        return productRepo.findBySkuIn(skuList).get();
     }
 
     // TODO fare ProductCategoryDao
@@ -68,7 +94,7 @@ public class ProductDaoImpl implements ProductDao {
     }
 
     @Override
-    public List<Product> getAvaibProd() {
+    public List<Product> getAvaibProdByCategory(String categoryCode) {
         return null;
     }
 
@@ -99,61 +125,6 @@ public class ProductDaoImpl implements ProductDao {
     }
 
 
-    //TODO aggiustare
-    @Override
-    public void setCatInProd(Map<String, String> mapValues) {
-        List<String> skuProdList = new ArrayList<>(mapValues.keySet());
-        for (Product product : productRepo.findBySkuIn(skuProdList))
-            for (String categoryCode : mapValues.values())
-                product.setProductCategory(prodCatDao.findByCatCode(categoryCode));
-    }
-
-    //TODO aggiustare
-    @Override
-    public void setDiscountInProd(Map<String, String> mapValues) {
-//        List<String> skuProdList = new ArrayList<>(mapValues.keySet());
-//        for (Product product : productRepo.findBySkuIn(skuProdList))
-//            for (String discountCode : mapValues.values())
-//                product.setDiscount(discDao.findByDiscCode(discountCode));
-
-        List<String> skuProdList = new ArrayList<>(mapValues.keySet());
-        List<Product> productList =productRepo.findBySkuIn(skuProdList);
-        List<String> discountCodeList = discDao.findByDiscCode()new ArrayList<>(mapValues.values());
-        int mapSize =mapValues.size();
-        for (int i =0 ; i<mapSize;i++){
-            Product product = productList.get(i);
-            product.setDiscount(discountCodeList.get(i));
-        }
-
-    }
-
-    @Override
-    public void deleteProd(List<String> skuProductList) {
-        em.createNativeQuery(
-                        "delete from product" +
-                                "where id in (:skuProductList)")
-                .setParameter("skuProductList", skuProductList)
-                .executeUpdate();
-    }
-
-    //TODO concludere
-    @Override
-    public void modifyPriceProd(Map<String,Double> mapValues) {
-        List<Product> productList = productRepo.findBySkuIn(new ArrayList<>(mapValues.keySet()));
-        List<Double> newPriceList = new ArrayList<>(mapValues.values());
-        int skuListSize = newPriceList.size();
-        for(int i = 0; i< skuListSize; i++){
-            Product product = productList.get(i);
-            product.setPrice(newPriceList.get(i));
-            em.merge(product);
-            if(i%BATCHSIZE == 0 && i>0){
-                em.flush();
-                em.clear();
-            }
-       }
-        em.flush();
-        em.clear();
-    }
 }
 
 

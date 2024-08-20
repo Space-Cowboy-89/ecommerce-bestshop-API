@@ -2,6 +2,7 @@ package com.codehero.bestshop.db.entity;
 
 
 import jakarta.persistence.*;
+import lombok.Getter;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.Fetch;
 
@@ -13,12 +14,18 @@ import java.sql.Timestamp;
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    private Integer id;
+
     @Column(name = "SKU")
     private String sku;
     @Column
     private String name;
     @Column
     private String brand;
+    @Getter
+    @Column
+    private String desc;
     @Column
     private Double price;
     @Column(name="created_at")
@@ -44,6 +51,10 @@ public class Product {
 
 
     public Product() {}
+
+    public Product(Integer id) {
+        this.id = id;
+    }
 
     public Product(String sku, String name, String brand, Double price, Timestamp createdAt, Timestamp modifiedAt,
                    Timestamp deletedAt, ProductCategory productCategory, Discount discount, ProductInventory productInventory, CartItem cartItem) {
@@ -104,6 +115,10 @@ public class Product {
         return cartItem;
     }
 
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
     public void setSku(String sku) {
         this.sku = sku;
     }
@@ -147,4 +162,13 @@ public class Product {
     public void setCartItem(CartItem cartItem) {
         this.cartItem = cartItem;
     }
+
+    public void setDesc(String desc) {
+        this.desc = desc;
+    }
+
+    public void setProdInventoryQuantity(int newQuantity){
+        productInventory.setQuantity(newQuantity);
+    }
+
 }

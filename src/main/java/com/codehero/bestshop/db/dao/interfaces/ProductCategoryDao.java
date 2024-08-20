@@ -9,4 +9,6 @@ public interface ProductCategoryDao {
     public List<ProductCategory> findByActTrueFalse(boolean isAct);
 
     public ProductCategory findByCatCode(String catCode);
+
+    public List<ProductCategory> findByCatCodeList(List<String> catCodeList);
 }

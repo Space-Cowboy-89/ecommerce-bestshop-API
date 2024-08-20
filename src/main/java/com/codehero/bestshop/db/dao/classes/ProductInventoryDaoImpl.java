@@ -17,7 +17,11 @@ import java.util.Map;
 public class ProductInventoryDaoImpl implements ProductInventoryDao {
     @PersistenceContext()
     private EntityManager em;
+
+    //Repository interface
     private ProductInventoryRepository prodInvRepo;
+
+    //Constants
     private final Logger LOGGER;
 
 
@@ -28,29 +32,18 @@ public class ProductInventoryDaoImpl implements ProductInventoryDao {
 
     @Override
     public List<ProductInventory> findByQuantGreaterThan(int numProducts) {
-        return prodInvRepo.findByQuantityGreaterThan(numProducts);
+        return prodInvRepo.findByQuantityGreaterThan(numProducts).get();
     }
 
     @Override
     public List<ProductInventory> findBySkuProduct(List<String> skuProductList) {
+        //TODO aggiustare
         return prodInvRepo.findProdInvBySkuProd(skuProductList);
     }
 
-    /**
-     * Le chiavi della Map contiene gli SKU di Product.
-     * I valori della stessa contiene la quantità dei prodotti da incrementare.
-     *
-     * @param prodAndQuant
-     */
-    //TODO aggiustare
     @Override
-    public void incDecAvaibilityProd(Map<String, Integer> prodAndQuant) {
-        List<ProductInventory> prodInvList = findBySkuProduct(new ArrayList<>
-                (prodAndQuant.keySet()));
-
-        for (ProductInventory pInventory : prodInvList)
-            for (Integer valueQuant : prodAndQuant.values())
-                prodInvRepo.updateQuantityById(valueQuant, pInventory.getId());
+    public void incDecAvaibilityProd(int newQuantity) {
+        prodInvRepo.updateQuantityById( newQuantity);
     }
 }
 

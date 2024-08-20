@@ -11,17 +11,19 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class ProductRequest {
     @JsonProperty(required = true)
+    private Integer id;
+    @JsonProperty(required = true)
     private String name;
     @JsonProperty(required = true)
     private String brand;
     @JsonProperty(required = true)
     private String sku;
     @JsonProperty(required = true)
-    private String descrizione;
+    private String desc;
     @JsonProperty(required = true)
-    private double price;
+    private Double price;
     @JsonProperty(required = true)
-    private int numProduct;
+    private Integer quantity;
     private String categoryCode;
     private String discountCode;
 }

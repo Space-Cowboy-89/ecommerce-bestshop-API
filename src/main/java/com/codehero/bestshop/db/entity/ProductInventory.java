@@ -35,6 +35,10 @@ public class ProductInventory {
         this.product = product;
     }
 
+    public ProductInventory(Integer quantity) {
+        this.quantity = quantity;
+    }
+
     public Integer getId() {
         return id;
     }

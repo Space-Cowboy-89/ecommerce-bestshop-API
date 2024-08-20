@@ -15,7 +15,11 @@ import java.util.List;
 public class ProductCategoryDaoImpl implements ProductCategoryDao {
     @PersistenceContext()
     private EntityManager entityManager;
+
+    //Repository interface
     private ProductCategoryRepository prodCatRepo;
+
+    //Constants
     private final Logger LOGGER;
 
     public ProductCategoryDaoImpl(ProductCategoryRepository productCategoryRepo) {
@@ -26,11 +30,17 @@ public class ProductCategoryDaoImpl implements ProductCategoryDao {
 
     @Override
     public ProductCategory findByCatCode(String catCode) {
-        return prodCatRepo.findByCategoryCode(catCode);
+        return prodCatRepo.findByCategoryCode(catCode).orElse(null);
     }
 
     @Override
     public List<ProductCategory> findByActTrueFalse(boolean isAct) {
-        return null;
+
+        return prodCatRepo.findByActive(isAct).get();
+    }
+
+    @Override
+    public List<ProductCategory> findByCatCodeList(List<String> catCodeList) {
+        return prodCatRepo.findByCategoryCodeIn(catCodeList).get();
     }
 }

@@ -7,13 +7,14 @@ import java.util.List;
 public interface DiscountDao {
 
     /**
-     * Retrieve record by active attr. (isAct var.)
+     * Retrieve active or disactive discounts
      *
      * @param isAct
      * @return
      */
-    public List<Discount> findByActTrueFalse( boolean isAct);
+    public List<Discount> findByActTrueFalse(boolean isAct);
 
     public Discount findByDiscCode(String discCode);
+
     public List<Discount> findByDiscCodeList(List<String> discCodeList);
 }

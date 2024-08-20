@@ -6,16 +6,17 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 
 public interface ProductRepository extends CrudRepository<Product, String> {
 
 
-    public int updatePriceBySku(double price, String sku);
+    public Optional<Integer> updatePriceBySku(double price, String sku);
 
-    public List<Product> findBySkuIn(List<String> sku);
+    public Optional<List<Product>> findBySkuIn(List<String> sku);
 
-    public Product findByName(String name);
+    public Optional<Product> findByName(String name);
 
     @Query(value =
             "select p.* " +

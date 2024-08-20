@@ -8,5 +8,5 @@ import java.util.Map;
 public interface ProductInventoryDao {
     public List<ProductInventory> findByQuantGreaterThan(int numProducts);
     public List<ProductInventory> findBySkuProduct(List<String> skuProductList);
-    public void incDecAvaibilityProd(Map<String, Integer> prodAndQuant);
+    public void incDecAvaibilityProd(int newQuantity);
 }

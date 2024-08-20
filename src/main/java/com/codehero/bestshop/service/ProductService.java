@@ -1,13 +1,18 @@
 package com.codehero.bestshop.service;
 
+import com.codehero.bestshop.db.dao.classes.ProductDaoImpl;
 import com.codehero.bestshop.db.entity.Product;
-import com.codehero.bestshop.db.repository.ProductRepository;
+import com.codehero.bestshop.db.entity.ProductInventory;
 import com.codehero.bestshop.request.ProductRequest;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
+import com.codehero.bestshop.utility.Constant.DbCrudConst;
+import com.codehero.bestshop.utility.Constant.GeneralConst;
+import org.apache.coyote.Response;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 //TODO integrare :
@@ -16,28 +21,113 @@ import org.springframework.stereotype.Service;
 //- Optional
 @Service
 public class ProductService {
-    @PersistenceContext(unitName = "prodEmFactory")
-    private EntityManager em;
-    //Repo
-    private ProductRepository productRepo;
-
+    // Dao Class
+    private ProductDaoImpl productDao;
+    //Services
+    private ProductCategoryService prodCatSrv;
+    private DiscountService discountSrv;
+    //Constants
     private final Logger LOGGER;
 
-    public ProductService(ProductRepository productRepo, Logger LOGGER) {
-        this.productRepo = productRepo;
+    public ProductService(ProductDaoImpl productDao, ProductCategoryService prodCatSrv, DiscountService discountSrv) {
+        this.productDao = productDao;
+        this.prodCatSrv = prodCatSrv;
+        this.discountSrv = discountSrv;
         this.LOGGER = LoggerFactory.getLogger(ProductService.class);
     }
 
-    public boolean addAvailProdotto(ProductRequest request){
+    public void insertProductList(List<ProductRequest> requestList) {
+        List<Product> productList = new ArrayList<>();
+        for (ProductRequest request : requestList)
+            productList.add(createProduct(request));
 
+        productDao.dbCrudInBatch(productList, DbCrudConst.DBOPERATION.insert);
     }
 
-    public void metodoProva(){}
-
-    public Product getProdByCateg(ProductRequest request){
-
+    public Product createProduct(ProductRequest productRequest) {
+        Product product = new Product();
+        product.setSku(productRequest.getSku());
+        product.setName(productRequest.getName());
+        product.setBrand(productRequest.getBrand());
+        product.setPrice(productRequest.getPrice());
+        product.setProductCategory(prodCatSrv.findByCategoryCode(productRequest.getCategoryCode()));
+        product.setDiscount(discountSrv.findByDiscountCode(productRequest.getDiscountCode()));
+        product.setProductInventory(new ProductInventory(productRequest.getQuantity()));
+        product.setCartItem();
+        return product;
     }
 
+    public String deleteProductList(List<String> skuList) {
+        List<Product> productList = productDao.findBySkuList(skuList);
+        String message = null;
+        if (skuList.size() != productList.size())
+            message = check(skuList,
+                    productList.stream().map(Product::getSku).toList());
+        productDao.dbCrudInBatch(productList, DbCrudConst.DBOPERATION.delete);
+        return message == null ? "ok" : message;
+    }
+
+    public String updateProductList(List<ProductRequest> requestList) {
+        List<String> skuList = requestList.stream().map(ProductRequest::getSku).toList();
+        List<Product> productList = productDao.findBySkuList(skuList);
+        int prodListSize = productList.size();
+        String message = null;
+        if (skuList.size() != prodListSize)
+            message = check(skuList,
+                    productList.stream().map(Product::getSku).toList());
+
+        for (int i = 0; i < prodListSize; ++i)
+            setProdFields(productList.get(i), requestList.get(i));
+
+        productDao.dbCrudInBatch(productList, DbCrudConst.DBOPERATION.update);
+        return message == null ? "ok" : "message";
+    }
+
+    public String check(List<String> skuRequestList, List<String> skuProductList) {
+        String str = "";
+        for (String skuRequest : skuRequestList) {
+            boolean flag = true;
+            for (String skuProduct : skuProductList)
+                if (skuProduct.equals(skuRequest)) {
+                    flag = false;
+                    break;
+                }
+
+            if (flag)
+                str += skuRequest + ", ";
+        }
+
+        return "I record con sku = " + str + " non sono presenti nel db!";
+    }
+
+    /**
+     * @param product
+     * @param request
+     */
+    public void setProdFields(Product product, ProductRequest request) {
+        String stringVal;
+        double doubleVal;
+        int intVal;
+
+        if ((intVal = request.getId()) != GeneralConst.NOINTEGERVAL)
+            product.setId(intVal);
+        if (!(stringVal = request.getName()).equals(GeneralConst.NOSTRINGVAL))
+            product.setName(stringVal);
+        if (!(stringVal = request.getBrand()).equals(GeneralConst.NOSTRINGVAL))
+            product.setBrand(stringVal);
+        if (!(stringVal = request.getSku()).equals(GeneralConst.NOSTRINGVAL))
+            product.setSku(stringVal);
+        if (!(stringVal = request.getDesc()).equals(GeneralConst.NOSTRINGVAL))
+            product.setDesc(stringVal);
+        if ((doubleVal = request.getPrice()) != GeneralConst.NODOUBLEVAL)
+            product.setPrice(doubleVal);
+        if ((intVal = request.getQuantity()) != GeneralConst.NOINTEGERVAL)
+            product.setProdInventoryQuantity(intVal);
+        if (!(stringVal = request.getCategoryCode()).equals(GeneralConst.NOSTRINGVAL))
+            product.setProductCategory(prodCatSrv.findByCategoryCode(stringVal));
+        if (!(stringVal = request.getDiscountCode()).equals(GeneralConst.NOSTRINGVAL))
+            product.setDiscount(discountSrv.findByDiscountCode(stringVal));
+    }
 
 
 }

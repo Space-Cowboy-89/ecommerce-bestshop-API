@@ -1,6 +1,8 @@
 package com.codehero.bestshop.db.dao.interfaces;
 
 import com.codehero.bestshop.db.entity.Product;
+import com.codehero.bestshop.request.ProductRequest;
+import com.codehero.bestshop.utility.Constant.DbCrudConst;
 
 import java.util.List;
 import java.util.Map;
@@ -12,43 +14,71 @@ import java.util.Map;
 
 public interface ProductDao {
 
-    /**
-     * Metodo che fà inserimento
-     *
-     * @param request
-     */
     public void insertProduct(Product product);
+
+    public void deleteProduct(Product product);
+
+    public void updateProduct(Product product);
+
+    /**
+     * Method does insert, update or delete query in batch way in product table
+     *
+     * @param productList
+     * @param dbOperation
+     */
+    public void dbCrudInBatch(List<Product> productList, DbCrudConst.DBOPERATION dbOperation);
+
+    public List<Product> findBySkuList(List<String> skuList);
 
     public Product getProdByName(String nameProduct);
 
     public List<Product> getProdByCategory(String categoryCode);
 
-    // Restituisce i prodotti che hanno uno sconto attivato e disattivato
+    /**
+     * Method retrieves products that They have active and disactive discount
+     *
+     * @param categoryCode
+     * @return
+     */
     public List<Product> getProdOfCatInDiscount(String categoryCode);
 
     public List<Product> getProdOfADiscount(String discountCode);
 
-    public List<Product> getAvaibProd();
+    public List<Product> getAvaibProdByCategory(String categoryCode);
 
-    //Restituisce i prodotti delle categorie att. o dis.
+    /**
+     * Method retrieves product that They have active or disactive categories
+     *
+     * @param isActive
+     * @return
+     */
     public List<Product> getProdByCatActDis(boolean isActive);
 
-    //Restituisce i prodotti di una categoria con uno sconto att. o dis.
+
+    /**
+     * Method retrieves products of a category that They have active or disactive discount
+     *
+     * @param categoryCode
+     * @param isActive
+     * @return
+     */
     public List<Product> getProdOfCatInDiscActDis(String categoryCode, boolean isActive);
 
-    //Restituisce prodotti disponibile che hanno uno sconto attivato e disattivato
+
+     /**
+     * Method retrieves available product that They have active and disactive discount
+     *
+     * @return
+     */
     public List<Product> getAvaibProdInDisc();
 
-    //Restituisce prodotti disponibile che hanno un legame con sconto dis. o att.
+    /**
+     * Method retrievs available products that They have relation with active or disactive discount
+     *
+     * @param isActive
+     * @return
+     */
     public List<Product> getAvaibProdInDiscActOrDis(boolean isActive);
-
-    public void setCatInProd(Map <String,String> mapValues);
-
-    public void setDiscountInProd(Map <String,String> mapValues);
-
-    public void deleteProd(List<String> skuProductList);
-
-    public void modifyPriceProd(Map<String,Double> mapValues);
 }
 
 

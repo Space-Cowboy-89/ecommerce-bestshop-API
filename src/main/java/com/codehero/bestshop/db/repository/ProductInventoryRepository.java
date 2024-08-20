@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface ProductInventoryRepository extends CrudRepository<ProductInventory,Integer> {
 
@@ -21,7 +22,7 @@ public interface ProductInventoryRepository extends CrudRepository<ProductInvent
 
     @Transactional
     @Modifying
-    public int updateQuantityById(Integer quantity, Integer id);
+    public void updateQuantityById(Integer newQuantity);
 
-    public List<ProductInventory> findByQuantityGreaterThan (int numProduct);
+    public Optional<List<ProductInventory>> findByQuantityGreaterThan (int numProduct);
 }

@@ -29,7 +29,8 @@ public class ProductCategory {
     private Timestamp modifiedAt;
     @Column(name = "deleted_at")
     private Timestamp deletedAt;
-    @OneToMany(mappedBy = "productCategory")
+
+    @OneToMany(mappedBy = "productCategory",fetch = FetchType.EAGER)
     private List<Product> productList;
 
     public ProductCategory() {

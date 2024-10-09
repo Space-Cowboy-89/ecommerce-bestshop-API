@@ -6,6 +6,7 @@ import com.codehero.bestshop.utility.Constant.DbCrudConst;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 
 //TODO creare "- prodotti disponibili per prodotto generico(es. "televisione 40 pollici nella barra ricerca")"
@@ -28,19 +29,20 @@ public interface ProductDao {
      */
     public void dbCrudInBatch(List<Product> productList, DbCrudConst.DBOPERATION dbOperation);
 
-    public List<Product> findBySkuList(List<String> skuList);
+    public Optional<List<Product>> findBySkuList(List<String> skuList);
 
-    public Product getProdByName(String nameProduct);
+    public Optional<Product> getProdByName(String nameProduct);
 
     public List<Product> getProdByCategory(String categoryCode);
 
+    public Optional<Product> getBySku(String sku);
     /**
      * Method retrieves products that They have active and disactive discount
      *
      * @param categoryCode
      * @return
      */
-    public List<Product> getProdOfCatInDiscount(String categoryCode);
+    public List<Product> getProdOfCatInDiscount(String categoryCode, String discountCode);
 
     public List<Product> getProdOfADiscount(String discountCode);
 

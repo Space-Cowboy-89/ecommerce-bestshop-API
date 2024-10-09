@@ -30,11 +30,12 @@ public class User {
     private Timestamp createdAt;
     @Column(name = "modified_at")
     private Timestamp modifiedAt;
-    @OneToOne(mappedBy = "user")
+
+    @OneToOne(mappedBy = "user",fetch = FetchType.EAGER)
     private UserAddress userAddress;
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user",fetch = FetchType.EAGER)
     private List<UserPayment> userPaymentList;
-    @OneToOne(mappedBy = "user")
+    @OneToOne(mappedBy = "user",fetch = FetchType.EAGER)
     private ShoppingSession shoppingSession;
 
     public User() {

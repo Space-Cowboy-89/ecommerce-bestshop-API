@@ -30,7 +30,8 @@ public class Discount {
     private Timestamp modifiedAt;
     @Column(name = "deleted_at")
     private Timestamp deletedAt;
-    @OneToMany(mappedBy = "discount")
+
+    @OneToMany(mappedBy = "discount",fetch = FetchType.EAGER)
     private List<Product> productList;
 
     public Discount() {

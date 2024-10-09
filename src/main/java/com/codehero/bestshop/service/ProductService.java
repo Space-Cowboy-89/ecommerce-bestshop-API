@@ -80,7 +80,7 @@ public class ProductService {
             setProdFields(productList.get(i), requestList.get(i));
 
         productDao.dbCrudInBatch(productList, DbCrudConst.DBOPERATION.update);
-        return message == null ? "ok" : "message";
+        return message == null ? "ok" : message;
     }
 
     public String check(List<String> skuRequestList, List<String> skuProductList) {
@@ -104,7 +104,7 @@ public class ProductService {
      * @param product
      * @param request
      */
-    public void setProdFields(Product product, ProductRequest request) {
+    public Product setProdFields(Product product, ProductRequest request) {
         String stringVal;
         double doubleVal;
         int intVal;
@@ -127,7 +127,59 @@ public class ProductService {
             product.setProductCategory(prodCatSrv.findByCategoryCode(stringVal));
         if (!(stringVal = request.getDiscountCode()).equals(GeneralConst.NOSTRINGVAL))
             product.setDiscount(discountSrv.findByDiscountCode(stringVal));
+        return product;
     }
 
+    public void insertProduct(ProductRequest request) {
+        productDao.insertProduct(createProduct(request));
+        LOGGER.info("Inserimento ok");
+    }
 
+    public void updateProduct(ProductRequest request) {
+        productDao.updateProduct(setProdFields(productDao.getBySku(request.getSku()), request));
+    }
+
+    public void deleteProduct(ProductRequest request) {
+        productDao.deleteProduct(productDao.getBySku(request.getSku()));
+    }
+
+    public Product getProductByName(String name) {
+        return productDao.getProdByName(name);
+    }
+
+    public List<Product> getBySkuList(List<String> skuList) {
+        return productDao.findBySkuList(skuList);
+    }
+
+    public List<Product> getProductByCat(String categoryCode) {
+        return productDao.getProdByCategory(categoryCode);
+    }
+
+    public List<Product> getProdOfCatInDiscount(String categoryCode, String discountCode) {
+        return productDao.getProdOfCatInDiscount(categoryCode, discountCode);
+    }
+
+    public List<Product> getProductOfADisc(String discountCode) {
+        return productDao.getProdOfADiscount(discountCode);
+    }
+
+    public List<Product> getAvailableProdByCategory(String categoryCode) {
+        return productDao.getAvaibProdByCategory(categoryCode);
+    }
+
+    public List<Product> getProdOfCatActDis(boolean isActive) {
+        return productDao.getProdByCatActDis(isActive);
+    }
+
+    public List<Product> getProdOfACatInDiscountActDis(String categoryCode, boolean isActive) {
+        return productDao.getProdOfCatInDiscActDis(categoryCode, isActive);
+    }
+
+    public List<Product> getAvaibProdInDiscount() {
+        return productDao.getAvaibProdInDisc();
+    }
+
+    public List<Product> getAvaibProdInDiscountActOrDis(boolean isActive) {
+        return productDao.getAvaibProdInDiscActOrDis(isActive);
+    }
 }

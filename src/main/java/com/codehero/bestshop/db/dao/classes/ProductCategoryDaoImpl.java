@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Optional;
 
 @Component
 public class ProductCategoryDaoImpl implements ProductCategoryDao {
@@ -34,13 +35,14 @@ public class ProductCategoryDaoImpl implements ProductCategoryDao {
     }
 
     @Override
-    public List<ProductCategory> findByActTrueFalse(boolean isAct) {
-
-        return prodCatRepo.findByActive(isAct).get();
+    public Optional<List<ProductCategory>> findByActTrueFalse(boolean isAct) {
+        return prodCatRepo.findByActive(isAct);
     }
+
 
     @Override
     public List<ProductCategory> findByCatCodeList(List<String> catCodeList) {
         return prodCatRepo.findByCategoryCodeIn(catCodeList).get();
     }
+
 }

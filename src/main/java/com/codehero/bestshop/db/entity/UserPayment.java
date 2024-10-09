@@ -20,7 +20,8 @@ public class UserPayment {
     private String accountNum;
     @Column
     private LocalDate expiry;
-    @ManyToOne(fetch = FetchType.LAZY)
+
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
     private User user;
 

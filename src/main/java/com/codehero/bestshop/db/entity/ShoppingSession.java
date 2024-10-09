@@ -17,7 +17,8 @@ public class ShoppingSession {
     private Timestamp createdAt;
     @Column(name = "modified_at")
     private Timestamp modifiedAt;
-    @OneToOne(fetch = FetchType.LAZY)
+
+    @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name="user_id")
     private User user;
 

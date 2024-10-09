@@ -18,10 +18,11 @@ public class CartItem {
     private Timestamp createdAt;
     @Column(name = "modified_at")
     private Timestamp modifiedAt;
-    @OneToOne(fetch = FetchType.LAZY)
+
+    @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "product_id")
     private Product product;
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "sessionId")
     private ShoppingSession shoppingSession;
 

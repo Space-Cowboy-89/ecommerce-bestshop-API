@@ -30,14 +30,13 @@ public class ProductDaoImpl implements ProductDao {
     private ProductInventoryDaoImpl prodInventDao;
     private ProductCategoryDaoImpl prodCatDao;
     private DiscountDaoImpl discDao;
-    private GeneralDaoImpl <Product> generalDao;
+    private GeneralDaoImpl<Product> generalDao;
 
     //Costants
     private final Logger LOGGER;
 
-
     public ProductDaoImpl(ProductRepository productRepo, ProductInventoryDaoImpl prodInventDao
-            , ProductCategoryDaoImpl prodCatDao, DiscountDaoImpl discDao, GeneralDaoImpl <Product> generalDao) {
+            , ProductCategoryDaoImpl prodCatDao, DiscountDaoImpl discDao, GeneralDaoImpl<Product> generalDao) {
         this.productRepo = productRepo;
         this.prodInventDao = prodInventDao;
         this.prodCatDao = prodCatDao;
@@ -45,7 +44,6 @@ public class ProductDaoImpl implements ProductDao {
         this.generalDao = generalDao;
         this.LOGGER = LoggerFactory.getLogger(ProductDaoImpl.class);
     }
-
 
 
     public void insertProduct(Product product) {
@@ -61,48 +59,59 @@ public class ProductDaoImpl implements ProductDao {
     }
 
     public void dbCrudInBatch(List<Product> productList, DbCrudConst.DBOPERATION dbOperation) {
-        generalDao.dbCrudInBatch(productList,dbOperation);
+        generalDao.dbCrudInBatch(productList, dbOperation);
     }
 
-
-
-    @Override
-    public Product getProdByName(String nameProduct) {
-        return productRepo.findByName(nameProduct).orElse(null);
+    public Optional<Product> getBySku(String sku) {
+        return productRepo.findBySku(sku);
     }
 
     @Override
-    public List<Product> findBySkuList(List<String> skuList) {
-        return productRepo.findBySkuIn(skuList).get();
+    public Optional<Product> getProdByName(String nameProduct) {
+        return productRepo.findByName(nameProduct);
     }
 
-    // TODO fare ProductCategoryDao
+    @Override
+    public Optional<List<Product>> findBySkuList(List<String> skuList) {
+
+        return productRepo.findBySkuIn(skuList);
+    }
+
+
     @Override
     public List<Product> getProdByCategory(String categoryCode) {
-        ProductCategory productCategory = productCategoryRepo.findByCategoryCode(categoryCode);
-        return productCategory.getProductList();
+        ProductCategory prodCat = prodCatDao.findByCatCode(categoryCode);
+        if (prodCat == null)
+            return null;
+        return prodCat.getProductList();
     }
 
     @Override
-    public List<Product> getProdOfCatInDiscount(String categoryCode) {
-        return null;
+    public List<Product> getProdOfCatInDiscount(String categoryCode, String discountCode) {
+        return productRepo.findProdByCatCodAndDiscCode(categoryCode, discountCode);
     }
 
     @Override
     public List<Product> getProdOfADiscount(String discountCode) {
-        return null;
+        return discDao.findByDiscCode(discountCode).getProductList();
     }
 
     @Override
     public List<Product> getAvaibProdByCategory(String categoryCode) {
-        return null;
+        List<Product> retProductList = new ArrayList<>();
+        for (Product product : prodCatDao.findByCatCode(categoryCode).getProductList())
+            if (product.getProductInventory().getQuantity() > 0)
+                retProductList.add(product);
+
+        return retProductList;
     }
 
 
     @Override
     public List<Product> getProdByCatActDis(boolean isActive) {
+//        todo continuare da qui
         List<Product> retProdList = new ArrayList<>();
-        for (ProductCategory category : prodCatDao.findByActTrueFalse(isActive))
+        for (ProductCategory category : prodCatDao.findByActTrueFalse(isActive).get())
             retProdList.addAll(category.getProductList());
 
         return retProdList;

@@ -18,6 +18,8 @@ public interface ProductRepository extends CrudRepository<Product, String> {
 
     public Optional<Product> findByName(String name);
 
+    public Optional<Product> findBySku(String sku);
+
     @Query(value =
             "select p.* " +
                     " from product p " +
@@ -63,4 +65,18 @@ public interface ProductRepository extends CrudRepository<Product, String> {
                     " and d.active =:isActive",
             nativeQuery = true)
     public List<Product> findAvaibProdByDiscIsActDis(boolean isActive);
+
+
+    @Query(value =
+            "select p.*" +
+                    " from discount d" +
+                    " inner join product p" +
+                    " on d.id = p.discount_id" +
+                    " inner join product_category pc" +
+                    " on p.category_id = pc.id" +
+                    " where pc.category_code =:categoryCode" +
+                    " AND d.discount_code = discountCode"
+            , nativeQuery = true)
+    public List<Product> findProdByCatCodAndDiscCode(String categoryCode, String discountCode);
+
 }

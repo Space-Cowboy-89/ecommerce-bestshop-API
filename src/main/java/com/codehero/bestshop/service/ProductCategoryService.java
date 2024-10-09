@@ -21,8 +21,6 @@ public class ProductCategoryService {
         LOGGER = LoggerFactory.getLogger(ProductCategoryService.class);
     }
 
-
-
     public ProductCategory findByCategoryCode(String categoryCode){
         return prodCatDao.findByCatCode(categoryCode);
     }

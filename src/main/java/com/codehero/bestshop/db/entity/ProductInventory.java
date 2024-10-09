@@ -21,7 +21,8 @@ public class ProductInventory {
     private Timestamp modifiedAt;
     @Column(name = "deleted_at")
     private Timestamp deletedAt;
-    @OneToOne(mappedBy = "productInventory")
+
+    @OneToOne(mappedBy = "productInventory",fetch = FetchType.EAGER)
     private Product product;
 
     public ProductInventory() {

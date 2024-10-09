@@ -37,16 +37,16 @@ public class Product {
 
 
     //relazioni
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "category_id")
     private ProductCategory productCategory;
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "discount_id")
     private Discount discount;
-    @OneToOne
+    @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "inventory_id")
     private ProductInventory productInventory;
-    @OneToOne(mappedBy = "product")
+    @OneToOne(mappedBy = "product",fetch = FetchType.EAGER)
     private CartItem cartItem;
 
 

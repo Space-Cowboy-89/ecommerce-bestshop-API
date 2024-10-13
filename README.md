@@ -1,4 +1,4 @@
-ecommerce-bestshop-API:
+ECOMMERCE-BESTSHOP-API:
 
 The software is a REST MVC API about a generic e-commerce web application. I've realizated procedures that are implemented in services.
 The software's stack is the following:
